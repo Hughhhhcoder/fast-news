@@ -3,9 +3,12 @@ package com.example.service.impl;
 import com.example.mapper.UserMapper;
 import com.example.pojo.User;
 import com.example.service.UserService;
+import com.example.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.utils.Md5Util;
+
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,4 +27,28 @@ public class UserServiceImpl implements UserService {
         //添加
         userMapper.add(username,md5String);
     }
+
+
+    @Override
+    public  void update(String username, String nickname, String email){
+        userMapper.update(nickname,email,username);
+    }
+
+
+
+    @Override
+    public void updateAvatar(String avatarUrl) {
+
+        Map<String,Object> map = ThreadLocalUtil.get();
+        Integer id = (Integer) map.get("id");
+        userMapper.updateAvatar(avatarUrl,id);
+    }
+
+    @Override
+    public void updatePwd(String newPwd) {
+        Map<String,Object> map = ThreadLocalUtil.get();
+        Integer id = (Integer) map.get("id");
+        userMapper.updatePwd(Md5Util.getMD5String(newPwd),id);
+    }
+
 }
