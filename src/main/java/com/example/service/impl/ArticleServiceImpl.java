@@ -21,6 +21,12 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
 
     @Override
+    public Article findById(Integer id) {
+        Article a = articleMapper.findBy(id) ;
+        return a;
+    }
+
+    @Override
     public void add(Article article) {
 
         //补充属性值
@@ -55,5 +61,19 @@ public class ArticleServiceImpl implements ArticleService {
         pb.setTotal(p.getTotal());
         pb.setItems(p.getResult());
         return pb;
+    }
+
+    @Override
+    public void update(Article article) {
+        article.setCreateTime(LocalDateTime.now());
+        articleMapper.update(article);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Map<String,Object> map = ThreadLocalUtil.get();
+        Integer newid = (Integer) map.get("id");
+        articleMapper.delete(newid);
+
     }
 }
